@@ -18,9 +18,22 @@
 export default {
   name: 'App',
   components: {
+  },
+  data() {
+    return {
+      question: null,
+      correctAnswer: null,
+      incorrectAnswers: []
+    }
+  },
+  created() {
+    const api = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"
+    this.axios.get(api).then((resp) => {
+      console.log(resp.data.results)
+    })
   }
+
 }
-//https://opentdb.com/api.php?amount=1&category=18&type=multiple
 </script>
 
 <style lang="scss">
