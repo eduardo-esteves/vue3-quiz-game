@@ -26,6 +26,16 @@ export default {
       incorrectAnswers: []
     }
   },
+  computed: {
+    answers() {
+      const leng = this.incorrectAnswers.length + 1 
+      const aleart = Math.round(Math.random() * leng)
+
+      const answers = this.incorrectAnswers
+      answers.splice(aleart, 0, this.correctAnswer)
+      return answers
+    }
+  },
   created() {
     const api = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"
     this.axios.get(api).then((resp) => {
