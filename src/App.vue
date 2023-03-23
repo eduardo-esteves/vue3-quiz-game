@@ -1,13 +1,17 @@
 <template v-if="this.question">
-  <div>
-    <h1>{{ this.question }}</h1>
-    <template v-for="(answer, index) of this.answers" v-bind:key="index">
-      <input type="radio" name="options" value="answer">
-      <label v-html="answer"></label><br>
-    </template>
+  <h1>{{ this.question }}</h1>
+  <template v-for="(answer, index) of this.answers" v-bind:key="index">
+    <input 
+      type="radio" 
+      :id="`id-${index}`"
+      name="options" 
+      :value="answer"
+      v-model="this.chosenAnswer">
 
-    <button class="send" type="button">Confirmar</button>
-  </div>
+    <label v-html="answer" :for="`id-${index}`"></label><br>
+  </template>
+
+  <button class="send" type="button" @click="this.submitAnswer()">Confirmar</button>
 </template>
 
 <script>
@@ -19,7 +23,13 @@ export default {
     return {
       question: null,
       correctAnswer: null,
-      incorrectAnswers: []
+      incorrectAnswers: [],
+      chosenAnswer: null
+    }
+  },
+  methods: {
+    submitAnswer() {
+      !this.chosenAnswer && alert('Escolha ao menos uma opção')
     }
   },
   computed: {
