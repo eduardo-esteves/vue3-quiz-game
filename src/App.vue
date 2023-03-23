@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Hello CLI VueJS</h1>
+    <h1>{{ this.question }}</h1>
     <input type="radio" name="options" value="Oculus">
     <label>Oculus</label><br>
 
@@ -29,7 +29,18 @@ export default {
   created() {
     const api = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"
     this.axios.get(api).then((resp) => {
-      console.log(resp.data.results)
+      try {
+        if (resp.status !== 200) {
+          throw 'Ops there is an error on request'
+        }
+        const data = resp.data.results[0]
+
+        this.question = data.question
+        this.incorrectAnswers = data.incorrect_answers
+        this.correctAnswer = data.correct_answer
+      } catch (err) {
+        console.error(err)
+      }
     })
   }
 
