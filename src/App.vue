@@ -1,14 +1,10 @@
-<template>
+<template v-if="this.question">
   <div>
     <h1>{{ this.question }}</h1>
-    <input type="radio" name="options" value="Oculus">
-    <label>Oculus</label><br>
-
-    <input type="radio" name="options" value="Microsoft">
-    <label>Microsoft</label><br>
-
-    <input type="radio" name="options" value="Tobii">
-    <label>Tobii</label><br>
+    <template v-for="(answer, index) of this.answers" v-bind:key="index">
+      <input type="radio" name="options" value="answer">
+      <label v-html="answer"></label><br>
+    </template>
 
     <button class="send" type="button">Confirmar</button>
   </div>
