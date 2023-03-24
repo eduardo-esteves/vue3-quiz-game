@@ -1,5 +1,5 @@
 <template v-if="this.question">
-  <h1>{{ this.question }}</h1>
+  <h1 v-html="this.question"></h1>
   <template v-for="(answer, index) of this.answers" v-bind:key="index">
     <input 
       type="radio" 
