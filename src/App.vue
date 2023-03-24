@@ -1,4 +1,5 @@
 <template v-if="this.question">
+  <ScoreBoard />
   <h1 v-html="this.question"></h1>
   <template v-for="(answer, index) of this.answers" v-bind:key="index">
     <input 
@@ -31,9 +32,13 @@
 </template>
 
 <script>
-export default {
+
+  import ScoreBoard from '@/components/ScoreBoard.vue'
+
+  export default {
   name: 'App',
   components: {
+    ScoreBoard
   },
   data() {
     return {
