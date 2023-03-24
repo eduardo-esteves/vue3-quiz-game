@@ -6,12 +6,28 @@
       :id="`id-${index}`"
       name="options" 
       :value="answer"
-      v-model="this.chosenAnswer">
+      v-model="this.chosenAnswer"
+      :disabled="this.answerSubmited">
 
     <label v-html="answer" :for="`id-${index}`"></label><br>
   </template>
 
-  <button class="send" type="button" @click="this.submitAnswer()">Confirmar</button>
+  <button 
+      v-if="!this.answerSubmited" 
+      class="send" 
+      type="button" 
+      @click="this.submitAnswer()"> Confirmar 
+    </button>
+
+    <section v-if="this.answerSubmited" class="result">
+      <template v-if="this.chosenAnswer == this.correctAnswer">
+        <h4>&#9989; Parabéns, a resposta "{{ this.correctAnswer }}" está correta.</h4>
+      </template>
+      <template v-else>
+        <h4>&#10060;  Que pena, a resposta está errada. A resposta correta é "{{ this.correctAnswer }}".</h4>
+      </template>
+      <button class="send" type="button">Próxima pergunta</button>
+    </section>
 </template>
 
 <script>
@@ -24,12 +40,14 @@ export default {
       question: null,
       correctAnswer: null,
       incorrectAnswers: [],
-      chosenAnswer: null
+      chosenAnswer: null,
+      answerSubmited: false
     }
   },
   methods: {
     submitAnswer() {
       !this.chosenAnswer && alert('Escolha ao menos uma opção')
+      this.answerSubmited = true;
     }
   },
   computed: {
