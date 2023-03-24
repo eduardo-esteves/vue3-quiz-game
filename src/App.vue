@@ -26,7 +26,7 @@
       <template v-else>
         <h4>&#10060;  Que pena, a resposta está errada. A resposta correta é "{{ this.correctAnswer }}".</h4>
       </template>
-      <button class="send" type="button">Próxima pergunta</button>
+      <button class="send" type="button" @click="this.getNewQuestion()">Próxima pergunta</button>
     </section>
 </template>
 
@@ -45,9 +45,32 @@ export default {
     }
   },
   methods: {
+    resetProps() {
+      this.question = null
+      this.chosenAnswer = null
+      this.answerSubmited = false     
+    },
     submitAnswer() {
       !this.chosenAnswer && alert('Escolha ao menos uma opção')
       this.answerSubmited = true;
+    },
+    getNewQuestion() {
+      this.resetProps()
+      const api = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"
+      this.axios.get(api).then((resp) => {
+        try {
+          if (resp.status !== 200) {
+            throw 'Ops there is an error on request'
+          }
+          const data = resp.data.results[0]
+
+          this.question = data.question
+          this.incorrectAnswers = data.incorrect_answers
+          this.correctAnswer = data.correct_answer
+        } catch (err) {
+          console.error(err)
+        }
+      })
     }
   },
   computed: {
@@ -61,21 +84,7 @@ export default {
     }
   },
   created() {
-    const api = "https://opentdb.com/api.php?amount=1&category=18&type=multiple"
-    this.axios.get(api).then((resp) => {
-      try {
-        if (resp.status !== 200) {
-          throw 'Ops there is an error on request'
-        }
-        const data = resp.data.results[0]
-
-        this.question = data.question
-        this.incorrectAnswers = data.incorrect_answers
-        this.correctAnswer = data.correct_answer
-      } catch (err) {
-        console.error(err)
-      }
-    })
+    this.getNewQuestion()
   }
 
 }
