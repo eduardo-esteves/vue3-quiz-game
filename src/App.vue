@@ -1,11 +1,16 @@
 <template v-if="this.question">
-  <ScoreBoard />
+
+  <ScoreBoard
+    :winCount="this.winCount"
+    :loseCount="this.loseCount"/>
+
   <h1 v-html="this.question"></h1>
+
   <template v-for="(answer, index) of this.answers" v-bind:key="index">
-    <input 
-      type="radio" 
+    <input
+      type="radio"
       :id="`id-${index}`"
-      name="options" 
+      name="options"
       :value="answer"
       v-model="this.chosenAnswer"
       :disabled="this.answerSubmited">
@@ -13,11 +18,11 @@
     <label v-html="answer" :for="`id-${index}`"></label><br>
   </template>
 
-  <button 
-      v-if="!this.answerSubmited" 
-      class="send" 
-      type="button" 
-      @click="this.submitAnswer()"> Confirmar 
+  <button
+      v-if="!this.answerSubmited"
+      class="send"
+      type="button"
+      @click="this.submitAnswer()"> Confirmar
     </button>
 
     <section v-if="this.answerSubmited" class="result">
@@ -46,18 +51,25 @@
       correctAnswer: null,
       incorrectAnswers: [],
       chosenAnswer: null,
-      answerSubmited: false
+      answerSubmited: false,
+      winCount: 0,
+      loseCount: 0,
     }
   },
   methods: {
     resetProps() {
       this.question = null
       this.chosenAnswer = null
-      this.answerSubmited = false     
+      this.answerSubmited = false
     },
     submitAnswer() {
       !this.chosenAnswer && alert('Escolha ao menos uma opção')
       this.answerSubmited = true;
+      if (this.chosenAnswer === this.correctAnswer) {
+        this.winCount++
+      } else {
+        this.loseCount++
+      }
     },
     getNewQuestion() {
       this.resetProps()
@@ -80,7 +92,7 @@
   },
   computed: {
     answers() {
-      const leng = this.incorrectAnswers.length + 1 
+      const leng = this.incorrectAnswers.length + 1
       const aleart = Math.round(Math.random() * leng)
 
       const answers = this.incorrectAnswers
