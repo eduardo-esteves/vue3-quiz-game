@@ -1,39 +1,44 @@
-<template v-if="this.question">
+<template>
 
-  <ScoreBoard
-    :winCount="this.winCount"
-    :loseCount="this.loseCount"/>
+  <template v-if="this.question">
 
-  <h1 v-html="this.question"></h1>
+    <ScoreBoard
+      :winCount="this.winCount"
+      :loseCount="this.loseCount"/>
 
-  <template v-for="(answer, index) of this.answers" v-bind:key="index">
-    <input
-      type="radio"
-      :id="`id-${index}`"
-      name="options"
-      :value="answer"
-      v-model="this.chosenAnswer"
-      :disabled="this.answerSubmited">
+    <h1 v-html="this.question"></h1>
 
-    <label v-html="answer" :for="`id-${index}`"></label><br>
-  </template>
+    <template v-for="(answer, index) of this.answers" v-bind:key="index">
+      <input
+        type="radio"
+        :id="`id-${index}`"
+        name="options"
+        :value="answer"
+        v-model="this.chosenAnswer"
+        :disabled="this.answerSubmited">
 
-  <button
+      <label v-html="answer" :for="`id-${index}`"></label><br>
+    </template>
+
+    <button
       v-if="!this.answerSubmited"
       class="send"
       type="button"
       @click="this.submitAnswer()"> Confirmar
     </button>
 
-    <section v-if="this.answerSubmited" class="result">
-      <template v-if="this.chosenAnswer == this.correctAnswer">
-        <h4>&#9989; Parabéns, a resposta "{{ this.correctAnswer }}" está correta.</h4>
-      </template>
-      <template v-else>
-        <h4>&#10060;  Que pena, a resposta está errada. A resposta correta é "{{ this.correctAnswer }}".</h4>
-      </template>
-      <button class="send" type="button" @click="this.getNewQuestion()">Próxima pergunta</button>
-    </section>
+  </template>
+
+  <section v-if="this.answerSubmited" class="result">
+    <template v-if="this.chosenAnswer == this.correctAnswer">
+      <h4>&#9989; Parabéns, a resposta "{{ this.correctAnswer }}" está correta.</h4>
+    </template>
+    <template v-else>
+      <h4>&#10060;  Que pena, a resposta está errada. A resposta correta é "{{ this.correctAnswer }}".</h4>
+    </template>
+    <button class="send" type="button" @click="this.getNewQuestion()">Próxima pergunta</button>
+  </section>
+
 </template>
 
 <script>
@@ -63,12 +68,15 @@
       this.answerSubmited = false
     },
     submitAnswer() {
-      !this.chosenAnswer && alert('Escolha ao menos uma opção')
-      this.answerSubmited = true;
-      if (this.chosenAnswer === this.correctAnswer) {
-        this.winCount++
-      } else {
-        this.loseCount++
+      if(!this.chosenAnswer) {
+        alert('Escolha ao menos uma opção')
+      } else{
+        this.answerSubmited = true
+        if (this.chosenAnswer === this.correctAnswer) {
+          this.winCount++
+        } else {
+          this.loseCount++
+        }
       }
     },
     getNewQuestion() {
